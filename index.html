@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Калькулятор производства — запас снизу</title>
+    <title>Калькулятор производства — финальная версия</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -197,18 +197,37 @@
         .graph-controls {
             margin-top: 10px;
             display: flex;
-            gap: 10px;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
         }
-        .graph-controls button {
-            width: auto;
+        .graph-controls-left {
+            display: flex;
+            gap: 10px;
+        }
+        .graph-controls-right {
+            display: flex;
+            gap: 10px;
+        }
+        .graph-controls button, .graph-controls a {
             padding: 5px 15px;
-            margin-top: 0;
+            font-size: 14px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            line-height: normal;
+            display: inline-block;
+        }
+        .graph-controls a:hover {
+            background: #2980b9;
         }
     </style>
 </head>
 <body>
-    <h1>🏭 Калькулятор производства (запас снизу)</h1>
+    <h1>🏭 Калькулятор производства</h1>
     <div class="calculator">
         <div class="form-group">
             <label for="product">Целевой продукт:</label>
@@ -255,8 +274,13 @@
             <canvas id="graph-canvas" width="2000" height="2000"></canvas>
         </div>
         <div class="graph-controls">
-            <button id="reset-graph">Сбросить позиции узлов</button>
-            <button id="reset-view">Сбросить вид</button>
+            <div class="graph-controls-left">
+                <a href="https://github.com/Arxxon/River-Town-Factory-calculator/tree/main" target="_blank">репозиторий</a>
+            </div>
+            <div class="graph-controls-right">
+                <button id="reset-graph">Сбросить позиции узлов</button>
+                <button id="reset-view">возврат в центр</button>
+            </div>
         </div>
     </div>
 
@@ -331,7 +355,6 @@
             option.textContent = prod;
             selectEl.appendChild(option);
         });
-        selectEl.value = "синяя колба";
 
         const modeToggle = document.getElementById('modeToggle');
         const modePerMinuteLabel = document.getElementById('modePerMinuteLabel');
@@ -460,6 +483,9 @@
         canvas.width = 2000;
         canvas.height = 2000;
 
+        ctx.imageSmoothingEnabled = true;
+        ctx.textRendering = 'optimizeLegibility';
+
         function canvasToWorld(canvasX, canvasY) {
             return {
                 x: (canvasX - offsetX) / scale,
@@ -470,7 +496,7 @@
         function splitTitle(nodeId) {
             const emoji = emojiMap[nodeId] || '📦';
             const fullText = emoji + ' ' + nodeId;
-            const maxChars = 18;
+            const maxChars = 16;
 
             const words = fullText.split(' ');
             const lines = [];
@@ -497,8 +523,11 @@
 
             if (lines.length === 0) lines.push(fullText);
 
-            // Добавляем запас 10 пикселей снизу, чтобы зелёная строка не вылезала
-            const height = 70 + (lines.length - 1) * 18 + 10;
+            const titleHeight = lines.length * 24;
+            // 8 отступ после названия, 16 высота жёлтой строки, 16 отступ между строками, 16 высота зелёной
+            const extraHeight = 8 + 16 + 16 + 16; // 56
+            const padding = 20;
+            const height = titleHeight + extraHeight + padding;
             return { lines, height };
         }
 
@@ -540,7 +569,7 @@
 
             const nodes = [];
             const marginX = 250;
-            const marginY = 120;
+            const marginY = 140;
             const startX = 150;
             const canvasHeight = canvas.height;
             for (const lvl in levels) {
@@ -549,13 +578,13 @@
                 const totalHeight = (count - 1) * marginY;
                 const startYLevel = (canvasHeight / 2) - (totalHeight / 2);
                 nodesAtLevel.forEach((node, idx) => {
-                    const verticalOffset = (idx % 3 - 1) * 30;
+                    const verticalOffset = (idx % 3 - 1) * 15;
                     const { lines, height } = splitTitle(node);
                     nodes.push({
                         id: node,
                         x: startX + parseInt(lvl) * marginX,
                         y: startYLevel + idx * marginY + verticalOffset,
-                        width: 160,
+                        width: 180,
                         height: height,
                         lines: lines
                     });
@@ -622,28 +651,32 @@
                 ctx.stroke();
 
                 ctx.fillStyle = 'white';
-                ctx.font = 'bold 16px Arial';
+                ctx.font = '20px "Segoe UI", "Helvetica", "Arial", sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
 
                 const lines = node.lines;
-                const lineHeight = 18;
-                const startY = node.y + node.height/2 - (lines.length-1)*lineHeight/2 - 8;
+                const lineHeight = 24;
+                const titleHeight = lines.length * lineHeight;
+                const extraHeight = 56; // 8+16+16+16
+                const totalContentHeight = titleHeight + extraHeight;
+                const startY = node.y + (node.height - totalContentHeight) / 2;
+
                 for (let i = 0; i < lines.length; i++) {
-                    ctx.fillText(lines[i], node.x + node.width/2, startY + i * lineHeight);
+                    ctx.fillText(lines[i], node.x + node.width/2, startY + i * lineHeight + lineHeight/2);
                 }
 
                 const rate = demandsForGraph[node.id];
                 const machinesCount = graphMachines[node.id];
                 if (rate !== undefined) {
-                    ctx.font = '14px Arial';
+                    ctx.font = '16px "Segoe UI", "Helvetica", "Arial", sans-serif';
                     ctx.fillStyle = '#f1c40f';
-                    let yOffset = node.y + node.height/2 + 12;
-                    if (lines.length > 1) yOffset += 4;
-                    ctx.fillText(rate.toFixed(2) + '/min', node.x + node.width/2, yOffset);
+                    const yellowY = startY + titleHeight + 8 + 8; // 8 отступ + половина высоты
+                    ctx.fillText(rate.toFixed(2) + '/min', node.x + node.width/2, yellowY);
                     if (machinesCount !== undefined) {
                         ctx.fillStyle = '#2ecc71';
-                        ctx.fillText('🛠️ ' + machinesCount.toFixed(2), node.x + node.width/2, yOffset + 18);
+                        const greenY = yellowY + 16 + 8; // 16 отступ + половина высоты
+                        ctx.fillText('🛠️ ' + machinesCount.toFixed(2), node.x + node.width/2, greenY);
                     }
                 }
             });
@@ -671,7 +704,11 @@
             demandsForGraph = demands;
             graphMachines = machines;
             graphEdges = edges;
-            graphNodes = generateInitialPositions(demands, edges);
+            if (Object.keys(demands).length > 0) {
+                graphNodes = generateInitialPositions(demands, edges);
+            } else {
+                graphNodes = [];
+            }
             drawGraph();
         }
 
@@ -884,9 +921,8 @@
             displayResults(product, rate, modeDescription);
         });
 
-        window.onload = () => {
-            displayResults('синяя колба', 1, 'в минуту: 1 шт/мин');
-        };
+        // Пустой старт
+        updateGraph([], {}, {});
     </script>
 </body>
 </html>
