@@ -612,12 +612,40 @@
                     label += ` (🛠️ ${allocatedMachines.toFixed(2)})`;
                 }
 
+                const isPrimaryEdge = !recipeMap.has(edge.from);
+                const perDayLabel = isPrimaryEdge
+                    ? (edge.quantity * currentDayLength).toFixed(1) + ' /сут'
+                    : null;
+
                 const midX = (fromX + toX) / 2;
                 const midY = (fromY + toY) / 2;
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(midX - 40, midY - 10, 80, 20);
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillText(label, midX, midY);
+
+                ctx.font = '12px Arial';
+                if (isPrimaryEdge && perDayLabel) {
+                    const boxW = 90, boxH = 36;
+                    ctx.fillStyle = '#fff8e1';
+                    ctx.strokeStyle = '#f39c12';
+                    ctx.lineWidth = 1 / scale;
+                    ctx.beginPath();
+                    ctx.roundRect(midX - boxW/2, midY - boxH/2, boxW, boxH, 4);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(label, midX, midY - 9);
+                    ctx.fillStyle = '#c0392b';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.fillText(perDayLabel, midX, midY + 9);
+                    ctx.font = '12px Arial';
+                } else {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(midX - 40, midY - 10, 80, 20);
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(label, midX, midY);
+                }
             });
 
             graphNodes.forEach(node => {
