@@ -1077,8 +1077,8 @@
                 node.x = worldPos.x - dragOffsetX;
                 node.y = worldPos.y - dragOffsetY;
 
-                node.x = Math.max(0, Math.min(WORLD_W - node.width, node.x));
-                node.y = Math.max(0, Math.min(WORLD_H - node.height, node.y));
+                node.x = Math.min(WORLD_W - node.width, node.x);
+                node.y = Math.min(WORLD_H - node.height, node.y);
 
                 drawGraph();
             } else if (isDraggingBg) {
