@@ -172,6 +172,16 @@
             font-weight: bold;
             background-color: #d5e8d5;
         }
+        .target-product,
+        .target-product:nth-child(even),
+        .target-product:nth-child(odd) {
+            background-color: #e8d5f5 !important;
+            font-weight: bold;
+        }
+        .target-product td {
+            border-left-color: #000;
+            border-right-color: #000;
+        }
         .recipe-cell {
             font-size: 0.85em;
             color: #555;
@@ -225,16 +235,105 @@
         .graph-controls a:hover {
             background: #2980b9;
         }
+
+        /* ── View toggle buttons ── */
+        .view-toggle {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .view-toggle button {
+            width: auto;
+            margin: 0;
+            padding: 5px 14px;
+            font-size: 13px;
+            background: #bdc3c7;
+            color: #2c3e50;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .view-toggle button.active {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        .view-toggle button:hover:not(.active) {
+            background: #a0a8ae;
+        }
+
+        /* ── Icon grid ── */
+        #icon-grid {
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 8px 0;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        #icon-grid.visible {
+            display: flex;
+        }
+        .icon-bubble {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 72px;
+            padding: 8px 6px 6px;
+            background: #3498db;
+            border: 2px solid #2980b9;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            transition: background 0.15s, border-color 0.15s, transform 0.1s;
+            user-select: none;
+            box-sizing: border-box;
+        }
+        .icon-bubble:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .icon-bubble.selected {
+            background: #1a5276;
+            border-color: #f1c40f;
+            box-shadow: 0 0 0 2px #f1c40f, 0 2px 8px rgba(0,0,0,0.25);
+        }
+        .icon-bubble img {
+            width: auto;
+            height: auto;
+            max-width: 48px;
+            max-height: 48px;
+            image-rendering: pixelated;
+            display: block;
+        }
+        .icon-bubble span {
+            margin-top: 5px;
+            font-size: 10px;
+            color: white;
+            text-align: center;
+            line-height: 1.2;
+            word-break: break-word;
+            hyphens: auto;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
     <h1>🏭 Калькулятор производства</h1>
     <div class="calculator">
         <div class="form-group">
-            <label for="product">Целевой продукт:</label>
-            <select id="product" size="10" style="height: auto;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+                <label for="product" style="margin:0;">Целевой продукт:</label>
+                <div class="view-toggle">
+                    <button id="btn-list" class="active" onclick="setView('list')">Список</button>
+                    <button id="btn-icons" onclick="setView('icons')">Значки</button>
+                </div>
+            </div>
+            <select id="product" size="10" style="height: auto; width:100%;">
                 <!-- Заполняется скриптом -->
             </select>
+            <div id="icon-grid"></div>
         </div>
 
         <div class="mode-switch">
@@ -298,8 +397,8 @@
 
         const recipes = [
             { product: "лесоматериал", output: 1, time: 2.4, ingredients: [{ item: "дерево", quantity: 1 }], building: "Фабрика" },
-            { product: "палки", output: 3, time: 4.8, ingredients: [{ item: "лесоматериал", quantity: 2 }], building: "Фабрика" },
-            { product: "деревянная рама", output: 1, time: 4.8, ingredients: [{ item: "палки", quantity: 4 }, { item: "болты", quantity: 6 }], building: "Ассемблер" },
+            { product: "деревянный стержень", output: 3, time: 4.8, ingredients: [{ item: "лесоматериал", quantity: 2 }], building: "Фабрика" },
+            { product: "деревянная рама", output: 1, time: 4.8, ingredients: [{ item: "деревянный стержень", quantity: 4 }, { item: "болты", quantity: 6 }], building: "Ассемблер" },
             { product: "слиток железа", output: 1, time: 2.4, ingredients: [{ item: "железная руда", quantity: 2 }], building: "Плавилка" },
             { product: "железный стержень", output: 3, time: 4.8, ingredients: [{ item: "слиток железа", quantity: 2 }], building: "Фабрика" },
             { product: "болты", output: 3, time: 1.6, ingredients: [{ item: "железный стержень", quantity: 1 }], building: "Фабрика" },
@@ -317,9 +416,9 @@
             { product: "стальная пластина", output: 2, time: 9.6, ingredients: [{ item: "стальной слиток", quantity: 3 }], building: "Фабрика" },
             { product: "медный слиток", output: 1, time: 2.4, ingredients: [{ item: "медная руда", quantity: 2 }], building: "Плавилка" },
             { product: "стальной слиток", output: 1, time: 3.2, ingredients: [{ item: "железная руда", quantity: 2 }, { item: "уголь", quantity: 2 }], building: "Литейный цех" },
-            { product: "зонтик", output: 1, time: 4.8, ingredients: [{ item: "палки", quantity: 2 }, { item: "промасленая бумага", quantity: 3 }], building: "Ассемблер" },
+            { product: "зонтик", output: 1, time: 4.8, ingredients: [{ item: "деревянный стержень", quantity: 2 }, { item: "промасленая бумага", quantity: 3 }], building: "Ассемблер" },
             { product: "бронзовое зеркало", output: 1, time: 4.8, ingredients: [{ item: "деревянная рама", quantity: 1 }, { item: "медная пластина", quantity: 3 }], building: "Ассемблер" },
-            { product: "основные инструменты", output: 1, time: 8, ingredients: [{ item: "палки", quantity: 2 }, { item: "природный камень", quantity: 1 }], building: "Ассемблер" },
+            { product: "основные инструменты", output: 1, time: 8, ingredients: [{ item: "деревянный стержень", quantity: 2 }, { item: "природный камень", quantity: 1 }], building: "Ассемблер" },
             { product: "промасленая бумага", output: 1, time: 7.2, ingredients: [{ item: "бумага", quantity: 3 }, { item: "кулинарное масло", quantity: 1 }], building: "Ассемблер" },
             { product: "железная рама", output: 1, time: 4.8, ingredients: [{ item: "железный стержень", quantity: 4 }, { item: "болты", quantity: 6 }], building: "Ассемблер" },
             { product: "армированная железная плита", output: 1, time: 4.8, ingredients: [{ item: "железная плита", quantity: 2 }, { item: "болты", quantity: 4 }], building: "Ассемблер" },
@@ -365,7 +464,7 @@
             "медный слиток": "copper_ingot",
             "нить": "thread",
             "основные инструменты": "basic_tools",
-            "палки": "sticks",
+            "деревянный стержень": "wooden_rod",
             "природный камень": "raw_stone",
             "промасленая бумага": "oiled_paper",
             "синяя колба": "blue_flask",
@@ -383,6 +482,18 @@
         // ── Fallback chain: local picture/ → GitHub → embedded ──
         const BASE_GH = "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture";
         const FALLBACK_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAABNElEQVR4nO2UvUrEQBRGT7J/iGvGNEqwEbEI21gqgk9mLVj5BD7DdltaCaKlbyBYiFaSRC10MxaZ3bg7d7LRDVZ7YCDcuffwDZMEVjRKGIYa+NUyM1O8Oac+2+1zsN6pFeD+7ZPTh2zGYwmfDrdYa82XZT7GmujupVIIoPXtSS2hd3RtOXypMe9EC2WuHlH4vndRbHltIVYb8E2PjTABub8B5KBze1N//eipl9BTSpHGQ3EAII2HKKVAuAPxyMVOj3QwsmWDEfg995ij7gVBAEC2fzktTp7NnvhuuRMaqe6Wt6m7UaVskfBPVAl1kiTFU6tfLMDUtGvIJSxlAlXSfzlyZboJrpSNJxQ/PYtxtpzwaid2tLvqJdYP9vV4u3YagM2b5xmPlfD8sf7xJKyEDXlWLME3Z1pcsOKskskAAAAASUVORK5CYII=";
+
+        // Called from table img onerror — tries GitHub, then embedded fallback
+        function handleTableIconError(img) {
+            const en = img.dataset.en;
+            if (!img.dataset.tried) {
+                img.dataset.tried = 'gh';
+                img.src = en ? (BASE_GH + '/' + en + '.png') : FALLBACK_SRC;
+            } else if (img.dataset.tried === 'gh') {
+                img.dataset.tried = 'fb';
+                img.src = FALLBACK_SRC;
+            }
+        }
 
         // Returns the best available src for a filename, trying local first.
         // Because we can't synchronously test file existence in the browser,
@@ -424,6 +535,65 @@
             option.textContent = prod;
             selectEl.appendChild(option);
         });
+
+        // ── View toggle (Список / Значки) ─────────────────────────────────
+        let currentView = 'list';
+        let selectedProduct = allProducts[0] || '';
+
+        function setView(mode) {
+            currentView = mode;
+            document.getElementById('btn-list').classList.toggle('active', mode === 'list');
+            document.getElementById('btn-icons').classList.toggle('active', mode === 'icons');
+            document.getElementById('product').style.display = mode === 'list' ? '' : 'none';
+            const grid = document.getElementById('icon-grid');
+            grid.classList.toggle('visible', mode === 'icons');
+            if (mode === 'icons') buildIconGrid();
+        }
+
+        function getSelectedProduct() {
+            if (currentView === 'list') return document.getElementById('product').value;
+            return selectedProduct;
+        }
+
+        function buildIconGrid() {
+            const grid = document.getElementById('icon-grid');
+            if (grid.dataset.built === '1') {
+                // just refresh selection highlight
+                grid.querySelectorAll('.icon-bubble').forEach(b => {
+                    b.classList.toggle('selected', b.dataset.prod === selectedProduct);
+                });
+                return;
+            }
+            grid.dataset.built = '1';
+            allProducts.forEach(prod => {
+                const en = iconMap[prod];
+                const bubble = document.createElement('div');
+                bubble.className = 'icon-bubble';
+                bubble.dataset.prod = prod;
+                if (prod === selectedProduct) bubble.classList.add('selected');
+
+                const img = document.createElement('img');
+                img.dataset.en = en || '';
+                const localSrc = en ? ('picture/' + en + '.png') : FALLBACK_SRC;
+                img.src = localSrc;
+                img.onerror = function() { handleTableIconError(this); };
+                img.alt = prod;
+
+                const label = document.createElement('span');
+                label.textContent = prod;
+
+                bubble.appendChild(img);
+                bubble.appendChild(label);
+
+                bubble.addEventListener('click', () => {
+                    selectedProduct = prod;
+                    grid.querySelectorAll('.icon-bubble').forEach(b =>
+                        b.classList.toggle('selected', b.dataset.prod === prod));
+                });
+
+                grid.appendChild(bubble);
+            });
+        }
 
         const modeToggle = document.getElementById('modeToggle');
         const modePerMinuteLabel = document.getElementById('modePerMinuteLabel');
@@ -1132,12 +1302,33 @@
             const result = calculate(targetProduct, targetRate);
             const { demands, machines, primary, edges } = result;
 
+            // Compute processing depth for each item in demands:
+            // raw resources = 0, items made from them = 1, etc.
+            const depthCache = {};
+            function getDepth(prod) {
+                if (prod in depthCache) return depthCache[prod];
+                if (!recipeMap.has(prod)) { depthCache[prod] = 0; return 0; }
+                const recipe = recipeMap.get(prod);
+                const d = 1 + Math.max(0, ...recipe.ingredients
+                    .filter(ing => ing.item in demands)
+                    .map(ing => getDepth(ing.item)));
+                depthCache[prod] = d;
+                return d;
+            }
+            Object.keys(demands).forEach(p => getDepth(p));
+
+            // Target product first, then intermediates by depth desc (furthest from raw first),
+            // then raw resources at the bottom. Within same depth → alphabetical.
             const allProducts = Object.keys(demands).sort((a, b) => {
-                const aIsPrimary = !recipeMap.has(a);
-                const bIsPrimary = !recipeMap.has(b);
-                if (aIsPrimary && !bIsPrimary) return 1;
-                if (!aIsPrimary && bIsPrimary) return -1;
-                return 0;
+                if (a === targetProduct) return -1;
+                if (b === targetProduct) return  1;
+                const aRaw = !recipeMap.has(a);
+                const bRaw = !recipeMap.has(b);
+                if (aRaw && !bRaw) return 1;   // raw goes to bottom
+                if (!aRaw && bRaw) return -1;
+                const da = depthCache[a] ?? 0, db = depthCache[b] ?? 0;
+                if (da !== db) return db - da;  // higher depth first
+                return a.localeCompare(b, 'ru');
             });
 
             let html = `<div class="day-info">Длительность суток: ${currentDayLength} мин</div>`;
@@ -1160,7 +1351,8 @@
                 const rate = demands[prod];
                 const perDay = rate * currentDayLength;
                 const isPrimary = !recipeMap.has(prod);
-                const rowClass = isPrimary ? 'primary' : 'intermediate';
+                const rowClass = prod === targetProduct ? 'target-product'
+                               : isPrimary ? 'primary' : 'intermediate';
 
                 let recipeCell = '—';
                 let machineCell = '—';
@@ -1181,22 +1373,14 @@
                 }
 
                 const en = iconMap[prod];
-                const localSrc  = en ? `picture/${en}.png` : FALLBACK_SRC;
-                const ghSrc     = en ? `${BASE_GH}/${en}.png` : FALLBACK_SRC;
+                const localSrc = en ? `picture/${en}.png` : FALLBACK_SRC;
                 html += `<tr class="${rowClass}">
                     <td>${prod}</td>
                     <td><img
                         src="${localSrc}"
+                        data-en="${en || ''}"
                         style="image-rendering:pixelated;vertical-align:middle;display:block;"
-                        onerror="
-                            if(!this.dataset.tried){
-                                this.dataset.tried='gh';
-                                this.src='${ghSrc}';
-                            } else if(this.dataset.tried==='gh'){
-                                this.dataset.tried='fb';
-                                this.src='${FALLBACK_SRC}';
-                            }
-                        "
+                        onerror="handleTableIconError(this)"
                     ></td>
                     <td class="recipe-cell">${recipeCell}</td>
                     <td>${rate.toFixed(2)}</td>
@@ -1221,7 +1405,7 @@
         }
 
         document.getElementById('calculate').addEventListener('click', () => {
-            const product = document.getElementById('product').value;
+            const product = getSelectedProduct();
             const isDayMode = modeToggle.checked;
 
             let rate;
