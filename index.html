@@ -337,60 +337,84 @@
         recipes.forEach(r => recipeMap.set(r.product, r));
         const allProducts = recipes.map(r => r.product).sort();
 
-                const iconMap = {
-            "армированная железная плита": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/reinforced_iron_plate.png",
-            "болты": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/screws.png",
-            "бронзовое зеркало": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/bronze_mirror.png",
-            "бумага": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/paper.png",
-            "дерево": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wood.png",
-            "деревянная дощечка": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wooden_plank.png",
-            "деревянная рама": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wooden_frame.png",
-            "древесное волокно": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wood_fiber.png",
-            "железная плита": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_plate.png",
-            "железная рама": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_frame.png",
-            "железная руда": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_ore.png",
-            "железное ядро": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_core.png",
-            "железный стержень": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_rod.png",
-            "зеленая колба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/green_flask.png",
-            "зерно": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/grain.png",
-            "зонтик": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/umbrella.png",
-            "каменный кирпич": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/stone_brick.png",
-            "камень": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/stone.png",
-            "красная колба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/red_flask.png",
-            "кулинарное масло": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/cooking_oil.png",
-            "лесоматериал": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/lumber.png",
-            "медная пластина": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_plate.png",
-            "медная руда": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_ore.png",
-            "медный кабель": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_cable.png",
-            "медный слиток": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_ingot.png",
-            "нить": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/thread.png",
-            "основные инструменты": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/basic_tools.png",
-            "палки": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/sticks.png",
-            "природный камень": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/raw_stone.png",
-            "промасленая бумага": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/oiled_paper.png",
-            "синяя колба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/blue_flask.png",
-            "слиток железа": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_ingot.png",
-            "спиртные напитки": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/spirits.png",
-            "стальная пластина": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/steel_plate.png",
-            "стальная труба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/steel_pipe.png",
-            "стальной слиток": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/steel_ingot.png",
-            "ткань": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/fabric.png",
-            "уголь": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/coal.png",
-            "усиленная деревянная плита": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/reinforced_wooden_plate.png",
-            "энергетический модуль С": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/energy_module_c.png",
+        const iconMap = {
+            "армированная железная плита": "reinforced_iron_plate",
+            "болты": "screws",
+            "бронзовое зеркало": "bronze_mirror",
+            "бумага": "paper",
+            "дерево": "wood",
+            "деревянная дощечка": "wooden_plank",
+            "деревянная рама": "wooden_frame",
+            "древесное волокно": "wood_fiber",
+            "железная плита": "iron_plate",
+            "железная рама": "iron_frame",
+            "железная руда": "iron_ore",
+            "железное ядро": "iron_core",
+            "железный стержень": "iron_rod",
+            "зеленая колба": "green_flask",
+            "зерно": "grain",
+            "зонтик": "umbrella",
+            "каменный кирпич": "stone_brick",
+            "камень": "stone",
+            "красная колба": "red_flask",
+            "кулинарное масло": "cooking_oil",
+            "лесоматериал": "lumber",
+            "медная пластина": "copper_plate",
+            "медная руда": "copper_ore",
+            "медный кабель": "copper_cable",
+            "медный слиток": "copper_ingot",
+            "нить": "thread",
+            "основные инструменты": "basic_tools",
+            "палки": "sticks",
+            "природный камень": "raw_stone",
+            "промасленая бумага": "oiled_paper",
+            "синяя колба": "blue_flask",
+            "слиток железа": "iron_ingot",
+            "спиртные напитки": "spirits",
+            "стальная пластина": "steel_plate",
+            "стальная труба": "steel_pipe",
+            "стальной слиток": "steel_ingot",
+            "ткань": "fabric",
+            "уголь": "coal",
+            "усиленная деревянная плита": "reinforced_wooden_plate",
+            "энергетический модуль С": "energy_module_c",
         };
 
-        // Preload icons for canvas
-        const iconImages = {};
+        // ── Fallback chain: local picture/ → GitHub → embedded ──
+        const BASE_GH = "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture";
+        const FALLBACK_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAABNElEQVR4nO2UvUrEQBRGT7J/iGvGNEqwEbEI21gqgk9mLVj5BD7DdltaCaKlbyBYiFaSRC10MxaZ3bg7d7LRDVZ7YCDcuffwDZMEVjRKGIYa+NUyM1O8Oac+2+1zsN6pFeD+7ZPTh2zGYwmfDrdYa82XZT7GmujupVIIoPXtSS2hd3RtOXypMe9EC2WuHlH4vndRbHltIVYb8E2PjTABub8B5KBze1N//eipl9BTSpHGQ3EAII2HKKVAuAPxyMVOj3QwsmWDEfg995ij7gVBAEC2fzktTp7NnvhuuRMaqe6Wt6m7UaVskfBPVAl1kiTFU6tfLMDUtGvIJSxlAlXSfzlyZboJrpSNJxQ/PYtxtpzwaid2tLvqJdYP9vV4u3YagM2b5xmPlfD8sf7xJKyEDXlWLME3Z1pcsOKskskAAAAASUVORK5CYII=";
+
+        // Returns the best available src for a filename, trying local first.
+        // Because we can't synchronously test file existence in the browser,
+        // we resolve via <img> load events and cache the winner.
+        const iconImages = {};   // nodeId → HTMLImageElement (resolved)
+
+        function loadIconImage(nodeId, onReady) {
+            if (iconImages[nodeId]) { onReady(iconImages[nodeId]); return; }
+            const en = iconMap[nodeId];
+            if (!en) {
+                const fb = new Image(); fb.src = FALLBACK_SRC;
+                iconImages[nodeId] = fb; onReady(fb); return;
+            }
+            const local = new Image();
+            local.onload = () => { iconImages[nodeId] = local; onReady(local); };
+            local.onerror = () => {
+                const gh = new Image();
+                gh.onload = () => { iconImages[nodeId] = gh; onReady(gh); };
+                gh.onerror = () => {
+                    const fb = new Image(); fb.src = FALLBACK_SRC;
+                    iconImages[nodeId] = fb; onReady(fb);
+                };
+                gh.src = "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/" + en + ".png";
+            };
+            local.src = "picture/" + en + ".png";
+        }
+
         function getIconImage(nodeId) {
             if (iconImages[nodeId]) return iconImages[nodeId];
-            const src = iconMap[nodeId];
-            if (!src) return null;
-            const img = new Image();
-            img.src = src;
-            img.onload = () => drawGraph();
-            iconImages[nodeId] = img;
-            return img;
+            // Kick off async load; redraw when ready
+            loadIconImage(nodeId, () => drawGraph());
+            return null;
         }
 
         const selectEl = document.getElementById('product');
@@ -549,11 +573,12 @@
 
             if (lines.length === 0) lines.push(fullText);
 
+            const ICON_SIZE = 40;
             const titleHeight = lines.length * 24;
-            const extraHeight = 8 + 16 + 16 + 16;
+            const extraHeight = ICON_SIZE + 8 + 16 + 16 + 16;
             const padding = 20;
             const height = titleHeight + extraHeight + padding;
-            return { lines, height };
+            return { lines, height, ICON_SIZE };
         }
 
         function generateInitialPositions(demands, edges) {
@@ -841,24 +866,25 @@
 
                 const lines = node.lines;
                 const lineHeight = 24;
+                const ICON_SIZE = 40;
                 const titleHeight = lines.length * lineHeight;
-                const extraHeight = 56;
+                const extraHeight = ICON_SIZE + 8 + 16 + 16 + 16;
                 const totalContentHeight = titleHeight + extraHeight;
-                const startY = node.y + (node.height - totalContentHeight) / 2;
+                const startY = node.y + (node.height - totalContentHeight) / 2 + 10;
 
-                // Draw icon image at top of node
+                // Draw icon image at top of node content
                 const iconImg = getIconImage(node.id);
-                const ICON_SIZE = 20;
                 const iconX = node.x + node.width/2 - ICON_SIZE/2;
-                const iconY = startY - ICON_SIZE - 4;
+                const iconY = startY;
                 if (iconImg && iconImg.complete && iconImg.naturalWidth > 0) {
                     ctx.imageSmoothingEnabled = false;
                     ctx.drawImage(iconImg, iconX, iconY, ICON_SIZE, ICON_SIZE);
                     ctx.imageSmoothingEnabled = true;
                 }
 
+                const textStartY = startY + ICON_SIZE + 8;
                 for (let i = 0; i < lines.length; i++) {
-                    ctx.fillText(lines[i], node.x + node.width/2, startY + i * lineHeight + lineHeight/2);
+                    ctx.fillText(lines[i], node.x + node.width/2, textStartY + i * lineHeight + lineHeight/2);
                 }
 
                 const rate = demandsForGraph[node.id];
@@ -866,7 +892,7 @@
                 if (rate !== undefined) {
                     ctx.font = `16px "Segoe UI", "Helvetica", "Arial", sans-serif`;
                     ctx.fillStyle = '#f1c40f';
-                    const yellowY = startY + titleHeight + 16;
+                    const yellowY = textStartY + titleHeight + 16;
                     ctx.fillText(rate.toFixed(2) + '/min', node.x + node.width/2, yellowY);
                     if (machinesCount !== undefined) {
                         ctx.fillStyle = '#2ecc71';
@@ -969,8 +995,9 @@
             const nodesW = maxX - minX;
             const nodesH = maxY - minY;
             const padding = 80;
-            const cw = container.clientWidth;
-            const ch = container.clientHeight;
+            const containerRect = container.getBoundingClientRect();
+            const cw = containerRect.width;
+            const ch = containerRect.height;
             const scaleX = (cw - padding * 2) / nodesW;
             const scaleY = (ch - padding * 2) / nodesH;
             scale = Math.min(scaleX, scaleY, 1.5);
@@ -1132,7 +1159,6 @@
             for (const prod of allProducts) {
                 const rate = demands[prod];
                 const perDay = rate * currentDayLength;
-                const icon = iconMap[prod] || "";
                 const isPrimary = !recipeMap.has(prod);
                 const rowClass = isPrimary ? 'primary' : 'intermediate';
 
@@ -1154,9 +1180,24 @@
                     buildingCell = building;
                 }
 
+                const en = iconMap[prod];
+                const localSrc  = en ? `picture/${en}.png` : FALLBACK_SRC;
+                const ghSrc     = en ? `${BASE_GH}/${en}.png` : FALLBACK_SRC;
                 html += `<tr class="${rowClass}">
                     <td>${prod}</td>
-                    <td><img src="${icon}" style="width:28px;height:28px;image-rendering:pixelated;vertical-align:middle;"></td>
+                    <td><img
+                        src="${localSrc}"
+                        style="image-rendering:pixelated;vertical-align:middle;display:block;"
+                        onerror="
+                            if(!this.dataset.tried){
+                                this.dataset.tried='gh';
+                                this.src='${ghSrc}';
+                            } else if(this.dataset.tried==='gh'){
+                                this.dataset.tried='fb';
+                                this.src='${FALLBACK_SRC}';
+                            }
+                        "
+                    ></td>
                     <td class="recipe-cell">${recipeCell}</td>
                     <td>${rate.toFixed(2)}</td>
                     <td>${perDay.toFixed(2)}</td>
