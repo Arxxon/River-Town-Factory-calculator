@@ -151,10 +151,7 @@
         tr:nth-child(even) {
             background: #f9f9f9;
         }
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 5px;
-        }
+        .emoji, td img { image-rendering: pixelated; }
         .primary {
             background-color: #e8f5e8;
         }
@@ -340,17 +337,61 @@
         recipes.forEach(r => recipeMap.set(r.product, r));
         const allProducts = recipes.map(r => r.product).sort();
 
-        const emojiMap = {
-            "дерево": "🌳", "железная руда": "⛏️", "природный камень": "🪨", "медная руда": "🪨", "уголь": "⚫", "зерно": "🌾",
-            "лесоматериал": "🪵", "палки": "🥢", "деревянная рама": "🖼️", "слиток железа": "🪙", "железный стержень": "🔩",
-            "болты": "⚙️", "деревянная дощечка": "🪵", "камень": "🧱", "каменный кирпич": "🧱", "железная плита": "🛡️",
-            "медная пластина": "🥉", "медный кабель": "🔌", "древесное волокно": "🌿", "нить": "🧵", "ткань": "👕",
-            "бумага": "📄", "стальная труба": "🔧", "стальная пластина": "🔩", "медный слиток": "🪙", "стальной слиток": "⚙️",
-            "зонтик": "☂️", "бронзовое зеркало": "🪞", "основные инструменты": "🔨", "промасленая бумага": "📃",
-            "железная рама": "🖼️", "армированная железная плита": "🛡️", "железное ядро": "⚛️", "энергетический модуль С": "🔋",
-            "усиленная деревянная плита": "🪵🧱", "красная колба": "🧪🔴", "зеленая колба": "🧪🟢", "синяя колба": "🧪🔵",
-            "кулинарное масло": "🫒", "спиртные напитки": "🍺"
+                const iconMap = {
+            "армированная железная плита": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/reinforced_iron_plate.png",
+            "болты": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/screws.png",
+            "бронзовое зеркало": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/bronze_mirror.png",
+            "бумага": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/paper.png",
+            "дерево": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wood.png",
+            "деревянная дощечка": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wooden_plank.png",
+            "деревянная рама": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wooden_frame.png",
+            "древесное волокно": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/wood_fiber.png",
+            "железная плита": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_plate.png",
+            "железная рама": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_frame.png",
+            "железная руда": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_ore.png",
+            "железное ядро": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_core.png",
+            "железный стержень": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_rod.png",
+            "зеленая колба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/green_flask.png",
+            "зерно": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/grain.png",
+            "зонтик": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/umbrella.png",
+            "каменный кирпич": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/stone_brick.png",
+            "камень": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/stone.png",
+            "красная колба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/red_flask.png",
+            "кулинарное масло": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/cooking_oil.png",
+            "лесоматериал": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/lumber.png",
+            "медная пластина": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_plate.png",
+            "медная руда": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_ore.png",
+            "медный кабель": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_cable.png",
+            "медный слиток": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/copper_ingot.png",
+            "нить": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/thread.png",
+            "основные инструменты": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/basic_tools.png",
+            "палки": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/sticks.png",
+            "природный камень": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/raw_stone.png",
+            "промасленая бумага": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/oiled_paper.png",
+            "синяя колба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/blue_flask.png",
+            "слиток железа": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/iron_ingot.png",
+            "спиртные напитки": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/spirits.png",
+            "стальная пластина": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/steel_plate.png",
+            "стальная труба": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/steel_pipe.png",
+            "стальной слиток": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/steel_ingot.png",
+            "ткань": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/fabric.png",
+            "уголь": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/coal.png",
+            "усиленная деревянная плита": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/reinforced_wooden_plate.png",
+            "энергетический модуль С": "https://raw.githubusercontent.com/Arxxon/River-Town-Factory-calculator/main/picture/energy_module_c.png",
         };
+
+        // Preload icons for canvas
+        const iconImages = {};
+        function getIconImage(nodeId) {
+            if (iconImages[nodeId]) return iconImages[nodeId];
+            const src = iconMap[nodeId];
+            if (!src) return null;
+            const img = new Image();
+            img.src = src;
+            img.onload = () => drawGraph();
+            iconImages[nodeId] = img;
+            return img;
+        }
 
         const selectEl = document.getElementById('product');
         allProducts.forEach(prod => {
@@ -480,8 +521,7 @@
         }
 
         function splitTitle(nodeId) {
-            const emoji = emojiMap[nodeId] || '📦';
-            const fullText = emoji + ' ' + nodeId;
+            const fullText = nodeId;
             const maxChars = 16;
 
             const words = fullText.split(' ');
@@ -672,7 +712,7 @@
                 const fromDemand   = demandsForGraph[edge.from];
                 if (fromMachines !== undefined && fromDemand > 0) {
                     const allocated = fromMachines * (edge.quantity / fromDemand);
-                    label += ` (🛠️ ${allocated.toFixed(2)})`;
+                    label += ` (⚙ ${allocated.toFixed(2)})`;
                 }
                 const isPrimary = !recipeMap.has(edge.from);
                 const perDayLabel = isPrimary
@@ -806,6 +846,17 @@
                 const totalContentHeight = titleHeight + extraHeight;
                 const startY = node.y + (node.height - totalContentHeight) / 2;
 
+                // Draw icon image at top of node
+                const iconImg = getIconImage(node.id);
+                const ICON_SIZE = 20;
+                const iconX = node.x + node.width/2 - ICON_SIZE/2;
+                const iconY = startY - ICON_SIZE - 4;
+                if (iconImg && iconImg.complete && iconImg.naturalWidth > 0) {
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(iconImg, iconX, iconY, ICON_SIZE, ICON_SIZE);
+                    ctx.imageSmoothingEnabled = true;
+                }
+
                 for (let i = 0; i < lines.length; i++) {
                     ctx.fillText(lines[i], node.x + node.width/2, startY + i * lineHeight + lineHeight/2);
                 }
@@ -820,7 +871,7 @@
                     if (machinesCount !== undefined) {
                         ctx.fillStyle = '#2ecc71';
                         const greenY = yellowY + 24;
-                        ctx.fillText('🛠️ ' + machinesCount.toFixed(2), node.x + node.width/2, greenY);
+                        ctx.fillText('⚙ ' + machinesCount.toFixed(2), node.x + node.width/2, greenY);
                     }
                 }
             });
@@ -1081,7 +1132,7 @@
             for (const prod of allProducts) {
                 const rate = demands[prod];
                 const perDay = rate * currentDayLength;
-                const emoji = emojiMap[prod] || '📦';
+                const icon = iconMap[prod] || "";
                 const isPrimary = !recipeMap.has(prod);
                 const rowClass = isPrimary ? 'primary' : 'intermediate';
 
@@ -1105,7 +1156,7 @@
 
                 html += `<tr class="${rowClass}">
                     <td>${prod}</td>
-                    <td><span class="emoji">${emoji}</span></td>
+                    <td><img src="${icon}" style="width:28px;height:28px;image-rendering:pixelated;vertical-align:middle;"></td>
                     <td class="recipe-cell">${recipeCell}</td>
                     <td>${rate.toFixed(2)}</td>
                     <td>${perDay.toFixed(2)}</td>
